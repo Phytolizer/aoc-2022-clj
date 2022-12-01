@@ -2,14 +2,13 @@
   (:require [clojure.java.io :refer [reader]]))
 
 (defn- insert-max [maxes x keep]
-  (if (empty? maxes)
+  (if (or (empty? maxes)
+          (> keep (count maxes)))
     (cons x maxes)
-    (if (> keep (count maxes))
-      (cons x maxes)
-      (let [min-max (apply min maxes)]
-        (if (<= x min-max)
-          maxes
-          (cons x (remove #{min-max} maxes)))))))
+    (let [min-max (apply min maxes)]
+      (if (<= x min-max)
+        maxes
+        (cons x (remove #{min-max} maxes))))))
 
 (defn- iter [numbers count maxes keep]
   (if (empty? numbers)
