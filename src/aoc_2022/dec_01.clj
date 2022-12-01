@@ -2,8 +2,7 @@
   (:require [clojure.java.io :refer [reader]]))
 
 (defn- insert-max [maxes x keep]
-  (if (or (empty? maxes)
-          (> keep (count maxes)))
+  (if (> keep (count maxes))
     (cons x maxes)
     (let [min-max (apply min maxes)]
       (if (<= x min-max)
