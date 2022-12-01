@@ -14,10 +14,11 @@
     (apply + (if (> count 0)
                (insert-max maxes count keep)
                maxes))
-    (let [number (first numbers)]
-      (if (empty? number)
-        (recur (rest numbers) 0 (insert-max maxes count keep) keep)
-        (recur (rest numbers) (+ count (Integer/parseInt number)) maxes keep)))))
+    (let [number (first numbers)
+          [count maxes] (if (empty? number)
+                          [0 (insert-max maxes count keep)]
+                          [(+ count (Integer/parseInt number)) maxes])]
+      (recur (rest numbers) count maxes keep))))
 
 (defn run [input part]
   (with-open [rdr (reader input)]
