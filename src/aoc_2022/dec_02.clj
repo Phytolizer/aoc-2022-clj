@@ -46,12 +46,15 @@
    :paper 2
    :scissors 3})
 
+(defn- split' [re s]
+  (split s re))
+
 (defn- iter [games total type]
   (if (empty? games)
     total
     (let [score (if (seq (first games))
                   (let [[a x] (->> (first games)
-                                   (#(split % #" "))
+                                   (split' #" ")
                                    (map first))]
                     (case type
                       :response (let [shape-score (->> x
