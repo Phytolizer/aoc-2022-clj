@@ -49,33 +49,31 @@
 (defn- split' [re s]
   (split s re))
 
-(defn- iter [games total type]
-  (if (empty? games)
-    total
-    (let [score (if (seq (first games))
-                  (let [[a x] (->> (first games)
-                                   (split' #" ")
-                                   (map first))]
-                    (case type
-                      :response (let [shape-score (->> x
-                                                       (get text-to-shape)
-                                                       (get shape-scores))]
-                                  (->> (list a x)
-                                       (apply game-result)
-                                       (get win-scores)
-                                       (+ shape-score)))
-                      :result (let [response (get text-to-result x)]
-                                (->> (list a response)
-                                     (apply inverse-game-result)
-                                     (get text-to-shape)
-                                     (get shape-scores)
-                                     (+ (get win-scores response))))
-                      (throw (ex-info "Unknown type" {:type type}))))
-                  0)]
-      (recur (rest games) (+ total score) type))))
-
 (defn run [input part]
   (with-open [rdr (reader input)]
-    (let [games (line-seq rdr)
-          type (if (= part 1) :response :result)]
-      (iter games 0 type))))
+    (let [type (if (= part 1) :response :result)]
+      (loop [games (line-seq rdr)
+             total 0]
+        (if (empty? games)
+          total
+          (let [score (if (seq (first games))
+                        (let [[a x] (->> (first games)
+                                         (split' #" ")
+                                         (map first))]
+                          (case type
+                            :response (let [shape-score (->> x
+                                                             (get text-to-shape)
+                                                             (get shape-scores))]
+                                        (->> (list a x)
+                                             (apply game-result)
+                                             (get win-scores)
+                                             (+ shape-score)))
+                            :result (let [response (get text-to-result x)]
+                                      (->> (list a response)
+                                           (apply inverse-game-result)
+                                           (get text-to-shape)
+                                           (get shape-scores)
+                                           (+ (get win-scores response))))
+                            (throw (ex-info "Unknown type" {:type type}))))
+                        0)]
+            (recur (rest games) (+ total score))))))))
