@@ -52,8 +52,7 @@
     (let [score (if (seq (first games))
                   (let [[a x] (->> (first games)
                                    (#(split % #" "))
-                                   (map first)
-                                   (apply list))]
+                                   (map first))]
                     (case type
                       :response (let [shape-score (->> x
                                                        (get text-to-shape)
