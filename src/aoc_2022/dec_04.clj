@@ -35,9 +35,9 @@
       1 (bool->int (permute-args range-contains?
                                  (first ranges)
                                  (second ranges)))
-      2  (bool->int  (permute-args range-overlaps?
-                                   (first ranges)
-                                   (second ranges))))))
+      2  (bool->int (permute-args range-overlaps?
+                                  (first ranges)
+                                  (second ranges))))))
 
 (defn run [input part]
   (with-open [rdr (reader input)]
