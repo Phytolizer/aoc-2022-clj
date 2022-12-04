@@ -25,17 +25,16 @@
         (<= b-low a-low b-high))))
 
 (defn- solve [line part]
-  (let [ranges (->> line
-                    (split' #",")
-                    (map (partial split' #"-"))
-                    (map (partial map #(Integer/parseInt %))))]
-    (bool->int
-     (apply
-      (partial permute-args
-               (case part
-                 1 range-contains?
-                 2 range-overlaps?))
-      ranges))))
+  (bool->int
+   (apply
+    (partial permute-args
+             (case part
+               1 range-contains?
+               2 range-overlaps?))
+    (->> line
+         (split' #",")
+         (map (partial split' #"-"))
+         (map (partial map #(Integer/parseInt %)))))))
 
 (defn run [input part]
   (with-open [rdr (reader input)]
@@ -43,6 +42,5 @@
            total 0]
       (if (empty? lines)
         total
-        (let [line (first lines)]
-          (recur (rest lines)
-                 (+ total (solve line part))))))))
+        (recur (rest lines)
+               (+ total (solve (first lines) part)))))))
