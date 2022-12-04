@@ -13,22 +13,21 @@
      ~lowercase (inc (- (int ~c) (int \a)))
      ~uppercase (+ (- (int ~c) (int \A)) 27)))
 
+(defn- common-letter-score [strs]
+  (->> strs
+       (map set)
+       (apply intersection)
+       (first)
+       (score)))
+
 (defn- solve [line part group]
   (case part
-    1 (let [middle (/ (count line) 2)]
-        (->> line
-             (split-at middle)
-             (map set)
-             (apply intersection)
-             (first)
-             (score)))
+    1 (->> line
+           (split-at (/ (count line) 2))
+           (common-letter-score))
     2 (if (not= (count group) 3)
         0
-        (->> group
-             (map set)
-             (apply intersection)
-             (first)
-             (score)))))
+        (common-letter-score group))))
 
 (defn run [input part]
   (with-open [rdr (reader input)]
