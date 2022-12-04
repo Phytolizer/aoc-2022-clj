@@ -21,10 +21,8 @@
 (defn- range-overlaps? [a b]
   (let [[a-low a-high] a
         [b-low b-high] b]
-    (or (and (<= a-low b-low)
-             (<= b-low a-high))
-        (and (<= b-low a-low)
-             (<= a-low b-high)))))
+    (or (<= a-low b-low a-high)
+        (<= b-low a-low b-high))))
 
 (defn- solve [line part]
   (let [ranges (->> line
