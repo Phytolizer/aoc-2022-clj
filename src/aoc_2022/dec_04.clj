@@ -30,12 +30,12 @@
                     (map (partial split' #"-"))
                     (map (partial map #(Integer/parseInt %))))]
     (case part
-      1 (bool->int (permute-args range-contains?
-                                 (first ranges)
-                                 (second ranges)))
-      2  (bool->int (permute-args range-overlaps?
-                                  (first ranges)
-                                  (second ranges))))))
+      1 (bool->int (apply
+                    (partial permute-args range-contains?)
+                    ranges))
+      2  (bool->int (apply
+                     (partial permute-args range-overlaps?)
+                     ranges)))))
 
 (defn run [input part]
   (with-open [rdr (reader input)]
