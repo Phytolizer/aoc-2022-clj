@@ -2,28 +2,33 @@
   (:require [clojure.java.io :refer [reader]]
             [clojure.set :refer [intersection]]))
 
-(def ^:private lowercase (range 97 123))
-(def ^:private uppercase (range 65 91))
+(defn- range' [lower upper]
+  (range lower (inc upper)))
+
+(def ^:private lowercase (range' (int \a) (int \z)))
+(def ^:private uppercase (range' (int \A) (int \Z)))
 
 (defmacro ^:private score [c]
   `(case (int ~c)
-     ~lowercase (inc (- (int ~c) 97))
-     ~uppercase (+ (- (int ~c) 65) 27)))
+     ~lowercase (inc (- (int ~c) (int \a)))
+     ~uppercase (+ (- (int ~c) (int \A)) 27)))
 
 (defn- solve [line part group]
   (case part
-    1 (let [middle (/ (count line) 2)
-            common (->> line
-                        (split-at middle)
-                        (map set)
-                        (apply intersection))]
-        (score (first common)))
+    1 (let [middle (/ (count line) 2)]
+        (->> line
+             (split-at middle)
+             (map set)
+             (apply intersection)
+             (first)
+             (score)))
     2 (if (not= (count group) 3)
         0
-        (let [common (->> group
-                          (map set)
-                          (apply intersection))]
-          (score (first common))))))
+        (->> group
+             (map set)
+             (apply intersection)
+             (first)
+             (score)))))
 
 (defn run [input part]
   (with-open [rdr (reader input)]
