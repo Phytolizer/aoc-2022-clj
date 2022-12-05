@@ -5,3 +5,4 @@
 (advent-test 2 [15 14531 12 11258])
 (advent-test 3 [157 7766 70 2415])
 (advent-test 4 [2 433 4 852])
+(advent-test 5 ["CMZ" "QMBMJDFTD" "MCD" "NBTVTJNFJ"])
