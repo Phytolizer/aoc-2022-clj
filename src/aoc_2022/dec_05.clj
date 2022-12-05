@@ -33,8 +33,8 @@
 
 (defn- parse-crates [lines]
   (for [line (until-numbers lines)]
-    (for [i (range 1 (count line) 4)]
-      (nth line i))))
+    (map (partial nth line)
+         (range 1 (count line) 4))))
 
 (defn- ->Stacks [crates]
   (for [stack-i (range 0 (apply max (map count crates)))]
